@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { PoMenuItem } from '@po-ui/ng-components';
+import { LoginService } from './components/login/login.service';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,15 @@ import { PoMenuItem } from '@po-ui/ng-components';
 })
 export class AppComponent {
 
+  readonly menus: Array<PoMenuItem> = [
+    { label: 'Home', link: '/home' },
+    { label: 'Novo leilão', link: '/leilao/cadastrar' },
+    { label: 'Leilões', link: '/leilao/listar' },
+    { label: 'Sobre', link: '/#' },
+  ];
+
+  constructor(
+    public loginService: LoginService,
+  ) { }
 
 }
