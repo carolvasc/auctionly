@@ -1,0 +1,11 @@
+<po-list-view p-property-title="name" [p-items]="auctions" class="po-md-8">
+  <ng-template p-list-view-content-template let-item>
+    <div class="po-row">
+      <po-info class="po-md-3" p-label="Valor Inicial" [p-value]="item.initialValue | currency: 'BRL'"></po-info>
+      <po-info class="po-md-3" p-label="Usado" [p-value]="item.itemUsed === true ? 'Sim' : 'Não'"></po-info>
+      <po-info class="po-md-3" p-label="User" [p-value]="item.user?.name"></po-info>
+      <po-info class="po-md-3" p-label="Finalizado" 
+      [p-value]="item.endDate !== undefined ? (item.endDate?.date | date: 'dd/MM/yyyy') : 'Não'"></po-info>
+    </div>
+  </ng-template>
+</po-list-view>
