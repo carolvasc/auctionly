@@ -1,11 +1,28 @@
-<po-list-view p-property-title="name" [p-items]="auctions" class="po-md-8">
-  <ng-template p-list-view-content-template let-item>
-    <div class="po-row">
-      <po-info class="po-md-3" p-label="Valor Inicial" [p-value]="item.initialValue | currency: 'BRL'"></po-info>
-      <po-info class="po-md-3" p-label="Usado" [p-value]="item.itemUsed === true ? 'Sim' : 'Não'"></po-info>
-      <po-info class="po-md-3" p-label="User" [p-value]="item.user?.name"></po-info>
-      <po-info class="po-md-3" p-label="Finalizado" 
-      [p-value]="item.endDate !== undefined ? (item.endDate?.date | date: 'dd/MM/yyyy') : 'Não'"></po-info>
-    </div>
-  </ng-template>
-</po-list-view>
+<div class="po-row">
+  <ng-container *ngFor="let auction of auctions">
+    <po-widget class="po-md-3 po-lg-4 po-mt-2">
+      <h3 class="po-text-center font-bold">{{auction.name}}</h3>
+      <div class="po-p-2">
+        <p>
+          <b>Valor inicial: </b>
+          {{auction.initialValue | currency: 'BRL'}}
+        </p>
+        <p>
+          <b>Usuário: </b>
+          {{auction.user?.name}}
+        </p>
+        <p>
+          <b>Abertura: </b>
+          {{auction.openingDate !== undefined ? (auction.openingDate?.date | date: 'dd/MM/yyyy') : ''}}
+        </p>
+        <p>
+          <b>Finalizado: </b>
+          {{auction.endDate !== undefined ? (auction.endDate?.date | date: 'dd/MM/yyyy') : 'Não'}}
+        </p>
+      </div>
+      <div class="po-row">
+        <po-button-group class="po-md-12" [p-buttons]="actions"> </po-button-group>
+      </div>
+    </po-widget>
+  </ng-container>
+</div>
