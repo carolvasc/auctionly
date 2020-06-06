@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PoPageLoginLiterals } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'app-login',
@@ -6,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  customLiterals: PoPageLoginLiterals = {
+    loginPlaceholder: 'Insira seu usuário de acesso',
+    passwordPlaceholder: 'Insira sua senha de acesso'
+  };
 
   constructor() { }
 
