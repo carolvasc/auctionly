@@ -6,7 +6,7 @@ export class Auction {
     public id?: number,
     public name?: string,
     public initialValue?: number,
-    public itemUsed?: boolean,
+    public usedItem?: boolean,
     public user?: User,
     public openingDate?: IDateApi,
     public endDate?: IDateApi,
