@@ -1,0 +1,88 @@
+{
+  "auction": [
+    {
+      "name": "Leilão 1",
+      "initialValue": 1250,
+      "usedItem": true,
+      "user": {
+        "name": "Carol"
+      },
+      "openingDate": {
+        "date": "06-07-2019"
+      },
+      "endDate": {
+        "date": "05-12-2019"
+      }
+    },
+    {
+      "name": "Leilão 2",
+      "initialValue": 300,
+      "usedItem": true,
+      "user": {
+        "name": "Carol"
+      },
+      "openingDate": {
+        "date": "06-07-2019"
+      },
+      "endDate": {
+        "date": "05-12-2019"
+      }
+    },
+    {
+      "name": "Leilão 3",
+      "initialValue": 1900,
+      "usedItem": false,
+      "user": {
+        "name": "Carol"
+      }
+    },
+    {
+      "name": "Leilão 4",
+      "initialValue": 1250,
+      "usedItem": false,
+      "user": {
+        "name": "Carol"
+      },
+      "openingDate": {
+        "date": "06-07-2019"
+      },
+      "endDate": {
+        "date": "05-12-2019"
+      }
+    },
+    {
+      "name": "Leilão 5",
+      "initialValue": 120,
+      "usedItem": true,
+      "user": {
+        "name": "Carol"
+      },
+      "openingDate": {
+        "date": "06-07-2019"
+      },
+      "endDate": {
+        "date": "05-12-2019"
+      }
+    }
+  ],
+  "user": [
+    {
+      "name": "Carol Vasconcelos",
+      "login": "carolvasc",
+      "password": "12345678",
+      "active": true
+    },
+    {
+      "name": "Pedro Henrique",
+      "login": "phenrique_",
+      "password": "987654321",
+      "active": true
+    },
+    {
+      "name": "João Gabriel",
+      "login": "joaogabriel",
+      "password": "147852369",
+      "active": false
+    }
+  ]
+}

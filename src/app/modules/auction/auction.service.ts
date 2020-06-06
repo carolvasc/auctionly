@@ -47,7 +47,7 @@ export class AuctionService {
    * Retorna todos os leilões
    */
   getAllAuctions(): Observable<any> {
-    return this.http.get<any>(`${this.config.apiUrl}/auctions`, { params: { limit: '99999' } });
+    return this.http.get<any>(`${this.config.apiUrl}/auction`);
   }
 
 }
