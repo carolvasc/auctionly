@@ -12,7 +12,7 @@ export class AppComponent {
 
   readonly menus: Array<PoMenuItem> = [
     { label: 'Home', link: '/home' },
-    { label: 'Novo leilão', link: '/leilao/cadastrar' },
+    { label: 'Cadastrar leilão', link: '/leilao/cadastrar' },
     { label: 'Leilões', link: '/leilao/listar' },
     { label: 'Sobre', link: '/#' },
   ];

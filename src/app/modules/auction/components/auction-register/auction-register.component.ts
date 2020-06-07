@@ -79,7 +79,7 @@ export class AuctionRegisterComponent implements OnInit {
 
     this.auction = {
       name: 'Leilão...',
-      openingDate: { date: `${yyyy}-${mm}-${dd}` },
+      openingDate: { date: `${yyyy}-${mm}-${dd}` }, // formatar essa data
     };
   }
 
@@ -97,10 +97,14 @@ export class AuctionRegisterComponent implements OnInit {
         }
       })
 
-    this.auctionSub = this.auctionService.saveAuction(obj)
-      .subscribe(response => console.log(response));
+    //  TODO: Adicionar o usuario ao salvar
 
-    this.poNotification.success('Leilão criado com sucesso');
+    this.auctionSub = this.auctionService.saveAuction(obj)
+      .subscribe(response => {
+        this.poNotification.success(`O leilão ${response.name} foi criado com sucesso. `);
+      }, error => {
+        this.poNotification.error(`Algo deu errado... ${error}`);
+      });
   }
 
   validateUsedItem(item: string): boolean {

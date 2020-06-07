@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
-import { User } from 'src/app/classes/User';
-import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { User } from '../../classes/User';
+import { Subject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { APP_CONFIG, IAppConfig } from '../../app.config';
 import { Router } from '@angular/router';
-import * as jwtDecode from 'jwt-decode';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +14,13 @@ export class LoginService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private poNotification: PoNotificationService,
     @Inject(APP_CONFIG) private config: IAppConfig
   ) { }
 
   user: User;
   authenticated: boolean = true;
-  userSubject: Subject<any> = new Subject<any>();
+  userSubject = new Subject();
   userAuthenticating: Subject<boolean> = new Subject<boolean>();
 
   /**
@@ -41,9 +42,7 @@ export class LoginService {
     this.authUser(user)
       .toPromise()
       .then((response: any) => {
-        localStorage.setItem('token', response.data.token);
-        //Preenche os dados do usuário com o token decodificado
-        // this.user = this.getUserData(this.decodeToken(response.data.token));
+        localStorage.setItem('token', response.token);
         this.router.navigate(['home']);
         this.authenticated = true;
         this.userAuthenticating.next(false);
@@ -51,7 +50,8 @@ export class LoginService {
       .catch((e) => {
         this.authenticated = false;
         this.userAuthenticating.next(false);
-        // this.messageService.add(e.error.message, 'danger');
+
+        this.poNotification.success(`Usuário ou senha inválidos. Favor tentar novamente.`);
       });
   }
 
@@ -61,7 +61,7 @@ export class LoginService {
    * @param user User informações de autenticação do usuário (login e senha)
    */
   private authUser(user: User): Observable<any> {
-    return this.http.post(`${this.config.apiUrl}/auth`, user);
+    return this.http.get(`${this.config.apiUrl}/user/${user.login}`);
   }
 
   /**
@@ -90,77 +90,13 @@ export class LoginService {
   isAuthenticated(): boolean {
     let token = this.getJwtToken();
 
-    // if (token !== null) {
-    //   const objToken: Object = { token };
-
-    //   return this.validateToken(objToken).toPromise()
-    //     .then((response) => {
-    //       if (response.data.valid == true) {
-    //         localStorage.removeItem('token');
-    //         localStorage.setItem('token', response.data.token);
-    //         token = this.getJwtToken();
-    //         this.user = this.getUserData(this.decodeToken(token));
-    //         setTimeout(() => {              
-    //           this.userSubject.next(this.user);
-    //         }, 10);
-    //         return this.authenticated = true;
-    //       } else {
-    //         return this.authenticated = false;
-    //       }
-    //     }).catch((error) => {
-    //       return new Promise(
-    //         (resolve, reject) => {
-    //           if(this.getJwtToken() !== null){
-    //             localStorage.removeItem('token');
-    //           }
-    //           this.authenticated = false;
-    //           this.router.navigate(['/login']);
-    //           resolve();
-    //         });
-    //     });
-    // } else {
-    //   return new Promise(
-    //     (resolve, reject) => {
-    //       if(this.getJwtToken() !== null){
-    //         localStorage.removeItem('token');
-    //       }
-    //       this.authenticated = false;
-    //       resolve();
-    //     });
-    // }
+    if (token !== null) {
+      this.authenticated = true;
+    } else {
+      this.authenticated = false;
+    }
 
     return false;
-  }
-
-  /**
-   * Chama a rota de validação do token do usuário
-   * 
-   * @param token string token JWT
-   */
-  private validateToken(): Observable<any> {
-    return new Observable<any>(obs => obs.next({ user: {}, roles: {} }));
-  }
-
-  /**
-   * Recupear os dados contidos no token
-   * 
-   * @param decodedJwt any informações decodificadas do token JWT
-   */
-  public getUserData(decodedJwt: any) {
-    if (decodedJwt) {
-      return decodedJwt.data;
-    } else {
-      return null;
-    }
-  }
-
-  /**
-   * Decodifica o token JWT
-   * 
-   * @param token string token
-   */
-  public decodeToken(token: string) {
-    return jwtDecode(token);
   }
 
   /**
