@@ -13,6 +13,10 @@
           {{auction.user?.name}}
         </p>
         <p>
+          <b>Item usado: </b>
+          {{auction.usedItem === true ? 'Sim' : 'Não'}}
+        </p>
+        <p>
           <b>Abertura: </b>
           {{auction.openingDate !== undefined ? (auction.openingDate?.date | date: 'dd/MM/yyyy') : ''}}
         </p>
@@ -23,8 +27,10 @@
       </div>
       <!-- Botões de ação -->
       <div class="po-row">
-        <po-button class="po-md-6" p-icon="po-icon-edit" p-label="Editar" p-type="default" (p-click)="editAuction(auction)"></po-button>
-        <po-button class="po-md-6" p-icon="po-icon-delete" p-label="Excluir" p-type="danger" (p-click)="modalConfirmation(auction)">
+        <po-button class="po-md-6" p-icon="po-icon-edit" p-label="Editar" p-type="default"
+          (p-click)="editAuction(auction)"></po-button>
+        <po-button class="po-md-6" p-icon="po-icon-delete" p-label="Excluir" p-type="danger"
+          (p-click)="modalConfirmation(auction)">
         </po-button>
       </div>
       <!-- Modal de Confirmação -->
