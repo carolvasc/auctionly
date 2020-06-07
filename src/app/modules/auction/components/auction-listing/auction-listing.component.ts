@@ -1,11 +1,13 @@
-import {
-  Component,
-  OnInit, OnDestroy
-} from '@angular/core';
-import { Auction } from 'src/app/classes/Auction';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+// Bibliotecas
 import { Subscription } from 'rxjs';
+// Classes e interfaces
+import { Auction } from '../../../../classes/Auction';
+// Serviços e configurações
 import { AuctionService } from '../../auction.service';
-import { PoButtonGroupItem } from '@po-ui/ng-components';
+// Componentes
+import { PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-auction-listing',
@@ -14,44 +16,92 @@ import { PoButtonGroupItem } from '@po-ui/ng-components';
 })
 export class AuctionListingComponent implements OnInit, OnDestroy {
 
-  auctionSub: Subscription;
+  currentAuction: Auction;
+  @ViewChild('modal') modal: PoModalComponent;
+  
+  getAuctionSub: Subscription;
+  deleteAuctionSub: Subscription;
+  
+  modalContent = '';
   auctions: Auction[] = [];
 
-  actions: Array<PoButtonGroupItem> = [
-    {
-      label: 'Editar',
-      icon: 'po-icon-edit',
-      tooltip: 'Você será redirecionado para a tela de edição.',
-      action: this.editAuction.bind(this)
+  confirm: PoModalAction = {
+    action: () => {
+      this.deleteAuction()
     },
+    label: 'Confirmar'
+  };
 
-    {
-      label: 'Excluir',
-      icon: 'po-icon-delete',
-      tooltip: 'Um modal de confirmação será aberto.',
-      action: this.deleteAuction.bind(this)
-    }
-  ];
+  cancel: PoModalAction = {
+    action: () => {
+      this.modal.close();
+    },
+    label: 'Cancelar',
+    danger: true
+  };
 
-  constructor(private auctionService: AuctionService) { }
+  confirmLabel: string = 'Confirmar';
+  cancelLabel: string = 'Cancelar';
+
+  constructor(
+    private router: Router,
+    private auctionService: AuctionService,
+    private poNotification: PoNotificationService,
+  ) { }
+
 
   ngOnInit(): void {
-    this.auctionSub = this.auctionService.getAllAuctions()
+    // Popula o array com os leilões cadastrados
+    this.getAuctionSub = this.auctionService.getAllAuctions()
       .subscribe((response: Auction[]) => this.auctions = response);
   }
 
   ngOnDestroy() {
-    if (this.auctionSub) {
-      this.auctionSub.unsubscribe();
+    if (this.getAuctionSub) {
+      this.getAuctionSub.unsubscribe();
+    }
+
+    if (this.deleteAuctionSub) {
+      this.deleteAuctionSub.unsubscribe();
     }
   }
 
-  editAuction() {
-    console.log('edit');
+  /**
+   * Redireciona para a tela de edição
+   * @param auction Leilão selecionado
+   */
+  editAuction(auction: Auction) {
+    this.router.navigate(['/leilao/editar', auction.id]);
   }
 
+  /**
+   * Exclui o leilão selecionado
+   */
   deleteAuction() {
-    console.log('delete');
+    if (this.currentAuction) {
+      this.deleteAuctionSub = this.auctionService.deleteAuction(this.currentAuction.id)
+        .subscribe(response => {
+          this.poNotification.success(`Leilão excluído com sucesso.`);
+          this.modal.close();
+        }, error => {
+          this.poNotification.error(`Algo deu errado... ${error}`);
+          this.modal.close();
+        });
+    }
+  }
+
+  /**
+   * Modal de confirmação
+   * @param auction Leilão selecionado
+   */
+  modalConfirmation(auction: Auction) {
+    this.currentAuction = auction;
+    this.modalContent = `Você tem certeza que deseja excluir o leilão ${auction.name}`;
+
+    this.confirm.label = this.confirmLabel;
+    this.cancel.label = this.cancelLabel;
+
+    this.modal.open();
   }
 
 }

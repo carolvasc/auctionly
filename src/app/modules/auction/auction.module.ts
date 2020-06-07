@@ -5,6 +5,7 @@ import { AuctionService } from './auction.service';
 import { AuctionRegisterComponent } from './components/auction-register/auction-register.component';
 import { PoDynamicModule } from '@po-ui/ng-components';
 import { PoButtonModule } from '@po-ui/ng-components';
+import { AuctionRegisterResolver } from './guards/auction-register.resolver';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { PoButtonModule } from '@po-ui/ng-components';
   ],
   providers: [
     AuctionService,
+    AuctionRegisterResolver,
   ]
 })
 export class AuctionModule { }
