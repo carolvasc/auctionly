@@ -23,6 +23,7 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
   fields: Array<PoDynamicFormField> = [
     {
       property: 'name',
+      label: 'Nome',
       required: true,
       minLength: 4,
       maxLength: 50,

@@ -11,14 +11,18 @@ import { LoginService } from './components/login/login.service';
 export class AppComponent {
 
   readonly menus: Array<PoMenuItem> = [
-    { label: 'Home', link: '/home' },
-    { label: 'Cadastrar leilão', link: '/leilao/cadastrar' },
-    { label: 'Leilões', link: '/leilao/listar' },
-    { label: 'Sobre', link: '/#' },
+    { label: 'Home', link: '/home', icon: 'po-icon-home' },
+    { label: 'Cadastrar leilão', link: '/leilao/cadastrar', icon: 'po-icon-document-filled' },
+    { label: 'Leilões', link: '/leilao/listar', icon: 'po-icon-list' },
+    { label: 'Logout', icon: 'po-icon-exit', action: this.logout.bind(this) },
   ];
 
   constructor(
     public loginService: LoginService,
   ) { }
+
+  logout() {
+    this.loginService.logout();
+  }
 
 }
