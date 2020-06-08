@@ -17,8 +17,7 @@ router.post('/register', async (req, res) => {
 
   try {
     if (await User.findOne({ email }))
-      return res.status(400).send({ error: 'User already exists' });
-
+      return res.status(400).send({ error: 'Usuário já existe.' });
 
     const user = await User.create(req.body);
 
@@ -26,7 +25,7 @@ router.post('/register', async (req, res) => {
 
     return res.send({ user, token: generateToken({ id: user.id }) });
   } catch (err) {
-    return res.status(400).send({ error: 'Registration failed' });
+    return res.status(400).send({ error: 'Erro ao cadastrar o usuário.' });
   }
 });
 
@@ -36,11 +35,13 @@ router.post('/authenticate', async (req, res) => {
   const user = await User.findOne({ login }).select('+password');
 
   if (!user) {
-    return res.status(400).send({ error: 'User not found' });
+    return res.status(400).send({ error: 'Usuário não encontrado.' });
+  } else if (!user.active) {
+    return res.status(400).send({ error: 'Usuário desativado.' });
   }
 
   if (!await bcrypt.compare(password, user.password)) {
-    return res.status(400).send({ error: 'Invalid password' });
+    return res.status(400).send({ error: 'Senha inválida.' });
   }
 
   user.password = undefined;
@@ -48,4 +49,4 @@ router.post('/authenticate', async (req, res) => {
   res.send({ user, token: generateToken({ id: user.id }) });
 });
 
-module.exports = app => app.use('/auth', router);
+module.exports = router;

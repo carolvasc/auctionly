@@ -12,49 +12,69 @@ router.get('/auction/all', async (req, res) => {
   try {
     let auctions = await Auction.find();
 
-    return res.send({ auctions });
+    return res.send({ message: 'Dados retornados com sucesso.', data: auctions });
   } catch (err) {
-    console.log(err);
-    return res.status(400).send({ error: 'Get all failed' });
+    return res.status(400).send({ error: 'Erro ao buscar todos os leilões.' });
   }
 });
 
-router.get('/auction', async (req, res) => {
+router.get('/auction/:id', async (req, res) => {
   try {
-    const auction = await Auction.findById(auction_id);
+    const auction = await Auction.findById(req.params.id);
 
     if (!auction) {
-      return res.status(400).send({ error: 'Auction not found' });
+      return res.status(400).send({ error: 'Leilão não encontrado.' });
     }
 
-    return res.send({ auction });
+    return res.send({ message: 'Dados retornados com sucesso.', data: auction });
   } catch (err) {
-    console.log(err);
-    return res.status(400).send({ error: 'Get on failed' });
+    return res.status(400).send({ error: 'Erro ao buscar o leilão.' });
   }
 });
 
 router.post('/auction', async (req, res) => {
   const { user } = req.body;
+
   try {
-    if (!await User.findById(user.id))
-      return res.status(400).send({ error: 'User not found' });
+    if (!await User.findById(user))
+      return res.status(400).send({ error: 'Usuário não encontrado.' });
 
     const auction = await Auction.create(req.body);
 
-    return res.send({ auction });
+    return res.send({ message: 'Leilão adicionado com sucesso.', data: auction });
   } catch (err) {
-    console.log(err);
-    return res.status(400).send({ error: 'Registration failed' });
+    return res.status(400).send({ error: 'Erro ao cadastrar o leilão.' });
   }
 });
 
-router.put('/auction', async (req, res) => {
-  res.send({ ok: true });
+router.put('/auction/:id', async (req, res) => {
+  try {
+    let auction = await Auction.updateOne({ _id: req.params.id }, req.body);
+
+    if (auction.n) {
+      auction = await Auction.findById(req.params.id);
+    } else {
+      return res.send({ message: 'Erro ao alterar os dados do leilão.' });
+    }
+
+    return res.send({ message: 'Leilão alterado com sucesso.', data: auction });
+  } catch (err) {
+    return res.status(400).send({ error: 'Erro ao alterar os dados do leilão.' });
+  }
 });
 
-router.delete('/auction', (req, res) => {
-  res.send({ ok: true });
+router.delete('/auction/:id', async (req, res) => {
+  try {
+    let auction = await Auction.deleteOne({ _id: req.params.id });
+
+    if (auction.n) {
+      return res.send({ message: 'Leilão excluído com sucesso.' });
+    } else {
+      return res.send({ message: 'Erro ao alterar os dados do leilão.' });
+    }
+  } catch (err) {
+    return res.status(400).send({ error: 'Erro ao alterar os dados do leilão.' });
+  }
 });
 
-module.exports = app => app.use('/api', router);
+module.exports = router;
