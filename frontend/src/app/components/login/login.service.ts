@@ -42,7 +42,8 @@ export class LoginService {
     this.authUser(user)
       .toPromise()
       .then((response: any) => {
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('token', response.data.token);
+        this.user = response.data.user;
         this.router.navigate(['home']);
         this.authenticated = true;
         this.userAuthenticating.next(false);
@@ -51,7 +52,7 @@ export class LoginService {
         this.authenticated = false;
         this.userAuthenticating.next(false);
 
-        this.poNotification.success(`Usuário ou senha inválidos. Favor tentar novamente.`);
+        this.poNotification.error(e.error);
       });
   }
 
@@ -61,7 +62,7 @@ export class LoginService {
    * @param user User informações de autenticação do usuário (login e senha)
    */
   private authUser(user: User): Observable<any> {
-    return this.http.get(`${this.config.apiUrl}/user/${user.login}`);
+    return this.http.post(`${this.config.apiUrl}/auth/authenticate`, user);
   }
 
   /**
@@ -87,16 +88,60 @@ export class LoginService {
    * Verifica se o usuário está autenticado validando o token.
    * Quando o token é validado com sucesso, ele é renovado.
    */
-  isAuthenticated(): boolean {
+  isAuthenticated(): Promise<boolean> {
+    // let token = this.getJwtToken();
+
+    // if (token !== null) {
+    //   this.authenticated = true;
+    // } else {
+    //   this.authenticated = false;
+    // }
+
+    // return false;
     let token = this.getJwtToken();
 
     if (token !== null) {
-      this.authenticated = true;
-    } else {
-      this.authenticated = false;
-    }
+      const objToken: Object = { token };
 
-    return false;
+      return this.authUser(objToken).toPromise()
+        .then((response) => {
+          if (response.data.token) {
+            localStorage.removeItem('token');
+            localStorage.setItem('token', response.data.token);
+            token = this.getJwtToken();
+            this.user = response.data.user;
+
+            return this.authenticated = true;
+          } else {
+            return this.authenticated = false;
+          }
+        }).catch((e) => {
+          return new Promise(
+            (resolve, reject) => {
+              if (this.getJwtToken() !== null) {
+                localStorage.removeItem('token');
+              }
+
+              this.authenticated = false;
+              this.router.navigate(['/login']);
+
+              this.poNotification.error(e.error);
+
+              resolve();
+            });
+        });
+    } else {
+      return new Promise(
+        (resolve, reject) => {
+          if (this.getJwtToken() !== null) {
+            localStorage.removeItem('token');
+          }
+
+          this.authenticated = false;
+
+          resolve();
+        });
+    }
   }
 
   /**
