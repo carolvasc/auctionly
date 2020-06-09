@@ -1,8 +1,26 @@
-<po-dynamic-form #dynamicForm p-auto-focus="name" [p-fields]="fields" [p-value]="auction">
-</po-dynamic-form>
+<form [formGroup]="auctionForm" style="margin: 0px 185px !important">
+  <div class="po-row">
+    <po-input class="po-md-5" p-label="Nome" formControlName="name"> </po-input>
 
-<div class="po-row po-mt-2">
-  <po-button class="po-md-3" p-label="Salvar" [p-disabled]="dynamicForm?.form.invalid"
-    (p-click)="onSubmit()">
-  </po-button>
-</div>
+    <po-number class="po-md-3" p-label="Valor inicial" formControlName="initialValue"> </po-number>
+
+    <po-radio-group class="po-md-2" name="radioGroupBasic" p-label="Usado" formControlName="usedItem" [p-options]="[
+    { label: 'Sim', value: true },
+    { label: 'Não', value: false }
+  ]">
+    </po-radio-group>
+
+  </div>
+
+  <div class="po-row">
+    <po-datepicker class="po-md-5" formControlName="openingDate" p-format="dd/mm/yyyy" p-label="Data de Abertura">
+    </po-datepicker>
+
+    <po-datepicker *ngIf="editMode" class="po-md-5" formControlName="endDate" p-format="dd/mm/yyyy" p-label="Data de Fechamento">
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Salvar" [p-disabled]="!auctionForm.valid" (p-click)="onSubmit()"> </po-button>
+  </div>
+</form>

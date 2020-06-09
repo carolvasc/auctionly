@@ -17,7 +17,7 @@ export class AuctionService {
    * @param auction Dados do leilão
    */
   saveAuction(auction: Auction): Observable<IApiResponse> {
-    return this.http.post<IApiResponse>(`${this.config.apiUrl}/auction`, auction)
+    return this.http.post<IApiResponse>(`${this.config.apiUrl}/api/auction`, auction)
   }
 
   /**

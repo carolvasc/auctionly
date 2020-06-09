@@ -8,6 +8,9 @@ import { Auction } from 'src/app/classes/Auction';
 import { AuctionService } from '../../auction.service';
 // Componentes
 import { PoDynamicFormField, PoNotificationService, PoDynamicFormComponent } from '@po-ui/ng-components';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { IApiResponse } from 'src/app/interfaces/ApiResponse';
+import { LoginService } from 'src/app/components/login/login.service';
 
 @Component({
   selector: 'app-auction-register',
@@ -20,54 +23,23 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
   auction: Auction = null;
   auctionSub: Subscription;
 
-  fields: Array<PoDynamicFormField> = [
-    {
-      property: 'name',
-      label: 'Nome',
-      required: true,
-      minLength: 4,
-      maxLength: 50,
-      gridColumns: 4,
-      gridSmColumns: 12
-    },
-    {
-      property: 'initialValue',
-      label: 'Valor inicial',
-      required: true,
-      minLength: 1,
-      gridColumns: 3,
-      gridSmColumns: 12
-    },
-    {
-      property: 'usedItem',
-      label: 'Usado',
-      required: true,
-      gridColumns: 3,
-      gridSmColumns: 12,
-      options: ['Sim', 'Não']
-    },
-    {
-      property: 'openingDate',
-      label: 'Data de Abertura',
-      type: 'date',
-      format: 'dd/MM/yyyy',
-      required: true,
-      gridColumns: 4,
-      gridSmColumns: 12,
-      minValue: '2020-06-06',
-      errorMessage: 'A data deve ser igual ou maior que hoje.'
-    }
-  ];
+  editMode: boolean = false;
+
+  auctionForm: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
+    private loginService: LoginService,
     private auctionService: AuctionService,
     private activatedRoute: ActivatedRoute,
     private poNotification: PoNotificationService,
-  ) {
-    this.callAsyncData();
-  }
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.createReactiveForm();
+
+    this.activatedRouteParams();
+  }
 
   ngOnDestroy() {
     if (this.auctionSub) {
@@ -75,28 +47,41 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
     }
   }
 
+  createReactiveForm() {
+    this.auctionForm = this.fb.group({
+      _id: [null],
+      name: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(30)])],
+      initialValue: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(30)])],
+      usedItem: [true, [Validators.required]],
+      openingDate: ['', Validators.required],
+      endDate: ['']
+    });
+  }
+
+  resetForm() {
+    const { _id, name, initialValue, usedItem, endDate, openingDate } = this.auction;
+
+    this.auctionForm.reset({
+      _id: _id,
+      name: name,
+      initialValue: initialValue,
+      usedItem: usedItem,
+      endDate: endDate || null,
+      openingDate: openingDate
+    });
+  }
+
   /**
    * Submete o formulário.
    */
   onSubmit() {
-    const obj = { ...this.form.value };
+    const user = this.loginService.getUser();
+    const auction = { ...this.auctionForm.value, user: user._id };
 
-    Object.entries(obj)
-      .map(([key, value]) => {
-        if (key === 'usedItem') {
-          obj[key] = this.transformUsedItemToBoolean(value.toString());
-        }
-
-        if (key === 'initialValue') {
-          obj[key] = (value.toString()).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
-        }
-      })
-
-    //  TODO: Adicionar o usuario ao salvar
     if (!this.auction) {
-      this.save(obj);
+      this.save(auction);
     } else {
-      this.update(obj);
+      this.update(auction);
     }
   }
 
@@ -104,10 +89,10 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
    * Salva um novo leilão.
    * @param auction Leilão selecionado.
    */
-  save(auction) {
+  save(auction: Auction) {
     this.auctionSub = this.auctionService.saveAuction(auction)
-      .subscribe(response => {
-        this.poNotification.success(`O leilão ${response.name} foi criado com sucesso. `);
+      .subscribe((response: IApiResponse) => {
+        this.poNotification.success(`O leilão ${response.data.name} foi criado com sucesso. `);
       }, error => {
         this.poNotification.error(`Algo deu errado... ${error}`);
       });
@@ -117,33 +102,13 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
    * Edita um leilão já existente, podendo inclusive adicionar novos campos como a data de finalização.
    * @param auction Leilão selecionado.
    */
-  update(auction) {
+  update(auction: Auction) {
     this.auctionSub = this.auctionService.updateAuction(auction)
-      .subscribe(response => {
-        this.poNotification.success(`O leilão ${response.name} foi alterado com sucesso. `);
+      .subscribe((response: IApiResponse) => {
+        this.poNotification.success(`O leilão ${response.data.name} foi alterado com sucesso. `);
       }, error => {
         this.poNotification.error(`Algo deu errado... ${error}`);
       });
-  }
-
-  /**
-   * Transforma o valor do item usado em boolean antes de enviar para a API.
-   * @param item Item usado (Sim/Não).
-   */
-  transformUsedItemToBoolean(item: string): boolean {
-    return item === 'Sim' ? true : false;
-  }
-
-  /**
-   * Transforma o valor do item usado em string antes de renderiza-lo na tela.
-   * @param item Item usado (true/false).
-   */
-  transformUsedItemToString(item: boolean): string {
-    return item === true ? 'Sim' : 'Não';
-  }
-
-  formatDate(item: string) {
-    // TODO: Criar todas as formatações de data aqui.
   }
 
   /**
@@ -152,44 +117,20 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
   async activatedRouteParams() {
     await new Promise((resolve) => {
       this.activatedRoute.data
-        .subscribe((data: { auction }) => {
-          if (data.auction) {
-            let auction = data.auction;
-
-            Object.entries(data.auction)
-              .map(([key, value]) => {
-                if (key === 'usedItem') {
-                  auction[key] = this.transformUsedItemToString(value as boolean);
-                }
-              });
-
-            this.auction = auction;
+        .subscribe((data: { editMode: boolean, auction: IApiResponse }) => {
+          if (data.editMode) {
+            this.editMode = data.editMode;
           }
+
+          if (data.auction.data) {
+            this.auction = data.auction.data as Auction;
+
+            this.resetForm();
+          }
+
           resolve();
         });
     })
-  }
-
-  /**
-   * Adiciona o campo de data finalizada no formulário caso esteja no modo edição.
-   */
-  callAsyncData() {
-    this.activatedRouteParams()
-      .then(() => {
-        if (this.auction) {
-          this.fields.push({
-            property: 'endDate',
-            label: 'Finalizado',
-            type: 'date',
-            format: 'dd/MM/yyyy',
-            gridColumns: 4,
-            gridSmColumns: 12,
-            minValue: '2020-06-06',
-            errorMessage: 'A data deve ser igual ou maior que hoje.',
-            visible: true,
-          })
-        }
-      });
   }
 
 }
