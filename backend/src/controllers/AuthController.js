@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
 
     user.password = undefined;
 
-    return res.send({ user, token: generateToken({ id: user.id }) });
+    return res.send({ message: 'Usuário logado com sucesso.', data: { user, token: generateToken({ id: user.id }) } });
   } catch (err) {
     return res.status(400).send({ error: 'Erro ao cadastrar o usuário.' });
   }
@@ -31,6 +31,10 @@ router.post('/register', async (req, res) => {
 
 router.post('/authenticate', async (req, res) => {
   const { login, password } = req.body;
+
+  // Descriptografa a senha que vem em base64
+  const buff = new Buffer(password, 'base64');
+  const pass = buff.toString('ascii');
 
   const user = await User.findOne({ login }).select('+password');
 
@@ -40,7 +44,7 @@ router.post('/authenticate', async (req, res) => {
     return res.status(400).send({ error: 'Usuário desativado.' });
   }
 
-  if (!await bcrypt.compare(password, user.password)) {
+  if (!await bcrypt.compare(pass, user.password)) {
     return res.status(400).send({ error: 'Senha inválida.' });
   }
 
