@@ -11,22 +11,18 @@ export class AuthGuard implements CanActivate {
 
   /**
    * Verifica se o usuário tem permissão para acessar a rota
-   * 
    */
   canActivate(state: ActivatedRouteSnapshot, route: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.loginService.authenticated) {
 
-      // const autorizatedRoles = state.data.roles;
-
-      // if(autorizatedRoles){
-      if (this.loginService.userHasRole()) {
-        return true;
-      } else {
-        this.router.navigate(['/home']);
-        // this.messageService.add('Você não possui permissão para acessar esta página', 'danger');
-        return false;
+    if (sessionStorage.getItem('PO_USER_LOGIN')) {
+      // Seta os valores da sessionStorage caso eles ainda não estejam setados.
+      if (!this.loginService.getTokenJwt()) {
+        const { user, token } = JSON.parse(sessionStorage.getItem('PO_USER_LOGIN'));
+        this.loginService.setTokenJwt(token);
+        this.loginService.setUser(user);
       }
 
+      return true;
     } else {
       this.router.navigate(['/login']);
       return false;
