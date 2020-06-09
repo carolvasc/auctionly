@@ -54,7 +54,7 @@ router.put('/auction/:id', async (req, res) => {
     if (auction.n) {
       auction = await Auction.findById(req.params.id);
     } else {
-      return res.send({ message: 'Erro ao alterar os dados do leilão.' });
+      return res.send({ message: 'Erro ao alterar os dados do leilão.', data: [] });
     }
 
     return res.send({ message: 'Leilão alterado com sucesso.', data: auction });
@@ -68,9 +68,9 @@ router.delete('/auction/:id', async (req, res) => {
     let auction = await Auction.deleteOne({ _id: req.params.id });
 
     if (auction.n) {
-      return res.send({ message: 'Leilão excluído com sucesso.' });
+      return res.send({ message: 'Leilão excluído com sucesso.', data: [] });
     } else {
-      return res.send({ message: 'Erro ao alterar os dados do leilão.' });
+      return res.send({ message: 'Erro ao alterar os dados do leilão.', data: [] });
     }
   } catch (err) {
     return res.status(400).send({ error: 'Erro ao alterar os dados do leilão.' });
