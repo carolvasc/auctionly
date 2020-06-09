@@ -3,11 +3,9 @@ const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, unique: true, required: true, lowercase: true},
   login: { type: String, required: true },
   password: { type: String, min: 6, required: true, select: false },
   active: { type: Boolean },
-  createAt: { type: Date, default: Date.now }
 })
 
 // Antes de salvar o usuário
