@@ -3,7 +3,7 @@ import { IDateApi } from '../interfaces/DateApi'
 
 export class Auction {
   constructor(
-    public id?: number,
+    public _id?: number,
     public name?: string,
     public initialValue?: number,
     public usedItem?: boolean,
