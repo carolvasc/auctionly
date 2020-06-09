@@ -8,6 +8,7 @@ import { Auction } from '../../../../classes/Auction';
 import { AuctionService } from '../../auction.service';
 // Componentes
 import { PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
+import { IApiResponse } from 'src/app/interfaces/ApiResponse';
 
 @Component({
   selector: 'app-auction-listing',
@@ -18,10 +19,10 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
 
   currentAuction: Auction;
   @ViewChild('modal') modal: PoModalComponent;
-  
+
   getAuctionSub: Subscription;
   deleteAuctionSub: Subscription;
-  
+
   modalContent = '';
   auctions: Auction[] = [];
 
@@ -53,7 +54,7 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Popula o array com os leilões cadastrados
     this.getAuctionSub = this.auctionService.getAllAuctions()
-      .subscribe((response: Auction[]) => this.auctions = response);
+      .subscribe((response: IApiResponse) => this.auctions = response.data as Auction[]);
   }
 
   ngOnDestroy() {
@@ -67,19 +68,19 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Redireciona para a tela de edição
+   * Redireciona para a tela de edição.
    * @param auction Leilão selecionado
    */
   editAuction(auction: Auction) {
-    this.router.navigate(['/leilao/editar', auction.id]);
+    this.router.navigate(['/leilao/editar', auction._id]);
   }
 
   /**
-   * Exclui o leilão selecionado
+   * Exclui o leilão selecionado.
    */
   deleteAuction() {
     if (this.currentAuction) {
-      this.deleteAuctionSub = this.auctionService.deleteAuction(this.currentAuction.id)
+      this.deleteAuctionSub = this.auctionService.deleteAuction(this.currentAuction._id)
         .subscribe(response => {
           this.poNotification.success(`Leilão excluído com sucesso.`);
           this.modal.close();
@@ -91,8 +92,8 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Modal de confirmação
-   * @param auction Leilão selecionado
+   * Modal de confirmação.
+   * @param auction Leilão selecionado.
    */
   modalConfirmation(auction: Auction) {
     this.currentAuction = auction;

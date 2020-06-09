@@ -6,11 +6,11 @@
         <p>
           <b>Valor inicial: </b>
           <!-- Criar validação para que se possa usar o currency pipe -->
-          {{auction.initialValue }}
+          {{auction.initialValue}}
         </p>
         <p>
           <b>Usuário: </b>
-          {{auction.user?.name}}
+          {{auction.user}}
         </p>
         <p>
           <b>Item usado: </b>
@@ -18,11 +18,11 @@
         </p>
         <p>
           <b>Abertura: </b>
-          {{auction.openingDate !== undefined ? (auction.openingDate?.date | date: 'dd/MM/yyyy') : ''}}
+          {{auction.openingDate | date: 'dd/MM/yyyy'}}
         </p>
         <p>
           <b>Finalizado: </b>
-          {{auction.endDate !== undefined ? (auction.endDate?.date | date: 'dd/MM/yyyy') : 'Não'}}
+          {{auction.endDate !== "" ? (auction.endDate | date: 'dd/MM/yyyy') : 'Não'}}
         </p>
       </div>
       <!-- Botões de ação -->
