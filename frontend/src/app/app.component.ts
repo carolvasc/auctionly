@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { PoMenuItem } from '@po-ui/ng-components';
 import { LoginService } from './components/login/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -19,10 +20,19 @@ export class AppComponent {
 
   constructor(
     public loginService: LoginService,
+    private router: Router
   ) { }
 
   logout() {
     this.loginService.logout();
+  }
+
+  authenticate() {
+    if(sessionStorage.getItem('PO_USER_LOGIN')) {
+      return true
+    } else {
+      return false
+    }
   }
 
 }
