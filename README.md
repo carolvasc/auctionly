@@ -41,6 +41,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [PO UI][poui]
 - [TypeScript][typescript]
 - [Node.js][nodejs]
+- [Express][express]
 - [MongoDB][mongodb]
 
 
@@ -113,6 +114,7 @@ Algumas sugestões são o [Postman][postman], que possui até uma versão para n
 [angular]: https://angular.io/
 [mongodb]: https://www.mongodb.com/
 [nodejs]: https://nodejs.org/
+[express]: https://expressjs.com/pt-br/
 [typescript]: https://www.typescriptlang.org/
 [npm]: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 [postman]: https://www.postman.com/
