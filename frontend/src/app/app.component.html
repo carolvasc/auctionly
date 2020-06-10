@@ -1,6 +1,5 @@
-<ng-container *ngIf="authenticate; else login">
+<ng-container *ngIf="showMenu; else login">
   <div class="po-wrapper">
-
     <po-menu [p-menus]="menus"></po-menu>
 
     <po-page-default>

@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
 
+  showMenu: boolean = false;
+
   readonly menus: Array<PoMenuItem> = [
     { label: 'Home', link: '/home', icon: 'po-icon-home' },
     { label: 'Cadastrar leilão', link: '/leilao/cadastrar', icon: 'po-icon-document-filled' },
@@ -20,19 +22,18 @@ export class AppComponent {
 
   constructor(
     public loginService: LoginService,
-    private router: Router
-  ) { }
+  ) {
+    this.loginService.loginSubject.subscribe(item => {
+      if (sessionStorage.getItem('PO_USER_LOGIN')) {
+        this.showMenu = true;
+      } else {
+        this.showMenu = false;
+      }
+    });
+  }
 
   logout() {
     this.loginService.logout();
-  }
-
-  authenticate() {
-    if(sessionStorage.getItem('PO_USER_LOGIN')) {
-      return true
-    } else {
-      return false
-    }
   }
 
 }
