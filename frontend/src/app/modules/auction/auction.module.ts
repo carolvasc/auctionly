@@ -12,6 +12,7 @@ import { AuctionRegisterResolver } from './guards/auction-register.resolver';
 import { PoFieldModule } from '@po-ui/ng-components';
 import { PoInfoModule } from '@po-ui/ng-components';
 import { PoWidgetModule } from '@po-ui/ng-components';
+import { PoModalModule } from '@po-ui/ng-components';
 // Interceptor
 import { RequestInterceptor } from '../../interceptors/request-interceptor';
 import { AuctionListingComponent } from './components/auction-listing/auction-listing.component';
@@ -28,6 +29,7 @@ import { AuctionListingComponent } from './components/auction-listing/auction-li
     FormsModule,
     ReactiveFormsModule,
     PoWidgetModule,
+    PoModalModule,
   ],
   declarations: [
     AuctionRegisterComponent,
