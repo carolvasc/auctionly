@@ -11,7 +11,8 @@ export class LoginComponent implements OnInit {
 
   customLiterals: PoPageLoginLiterals = {
     loginPlaceholder: 'Insira seu usuário de acesso',
-    passwordPlaceholder: 'Insira sua senha de acesso'
+    passwordPlaceholder: 'Insira sua senha de acesso',
+    loginHint: 'Crie seu usuário pela API',
   };
   
   constructor(@Inject(APP_CONFIG) private config: IAppConfig) { }

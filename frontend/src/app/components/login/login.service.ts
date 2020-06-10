@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../../classes/User';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,8 @@ export class LoginService {
   token: string = null;
   authenticated: boolean = true;
 
+  loginSubject: Subject<boolean> = new Subject();
+
   /**
    * Realiza o logout do usuário e limpa o sessionStorage.
    */
@@ -23,6 +26,8 @@ export class LoginService {
 
     this.user = null;
     this.token = null;
+
+    this.loginSubject.next(false);
 
     this.router.navigate(['/login']);
   }
