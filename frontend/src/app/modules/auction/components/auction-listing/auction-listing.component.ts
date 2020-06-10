@@ -51,11 +51,10 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
     private poNotification: PoNotificationService,
   ) { }
 
-
   ngOnInit(): void {
     this.getAllAuctions();
 
-    // Ao excluir um leilão a lista deverá ser atualizada
+    // Ao excluir um leilão a lista será atualizada
     this.reloadListSub = this.auctionService.reloadListSubject
       .subscribe(reload => reload === true ? this.getAllAuctions() : null);
   }
@@ -75,7 +74,7 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Popula o array com os leilões cadastrados
+   * Popula a propriedade auctions com os leilões cadastrados.
    */
   getAllAuctions() {
     this.getAuctionSub = this.auctionService.getAllAuctions()
@@ -84,9 +83,9 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
 
   /**
    * Redireciona para a tela de edição.
-   * @param auction Leilão selecionado
+   * @param auction Leilão selecionado.
    */
-  editAuction(auction: Auction) {
+  redirectToEdition(auction: Auction) {
     this.router.navigate(['/leilao/editar', auction._id]);
   }
 
@@ -96,7 +95,7 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
   deleteAuction() {
     if (this.currentAuction) {
       this.deleteAuctionSub = this.auctionService.deleteAuction(this.currentAuction._id)
-        .subscribe(response => {
+        .subscribe(() => {
           this.poNotification.success(`Leilão excluído com sucesso.`);
           this.auctionService.reloadListSubject.next(true);
           this.modal.close();

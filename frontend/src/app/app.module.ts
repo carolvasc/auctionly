@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AuthGuard } from './guards/auth.guard';
 
-// POUI Modules
+// PO UI Modules
 import { PoModule } from '@po-ui/ng-components';
 import { PoPageLoginModule } from '@po-ui/ng-templates';
 

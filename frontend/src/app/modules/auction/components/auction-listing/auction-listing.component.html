@@ -5,7 +5,6 @@
       <div class="po-p-2">
         <p>
           <b>Valor inicial: </b>
-          <!-- Criar validação para que se possa usar o currency pipe -->
           {{auction.initialValue}}
         </p>
         <p>
@@ -25,14 +24,16 @@
           {{auction.endDate !== "" ? (auction.endDate | date: 'dd/MM/yyyy') : 'Não'}}
         </p>
       </div>
+
       <!-- Botões de ação -->
       <div class="po-row">
         <po-button class="po-md-6" p-icon="po-icon-edit" p-label="Editar" p-type="default"
-          (p-click)="editAuction(auction)"></po-button>
+          (p-click)="redirectToEdition(auction)"></po-button>
         <po-button class="po-md-6" p-icon="po-icon-delete" p-label="Excluir" p-type="danger"
           (p-click)="modalConfirmation(auction)">
         </po-button>
       </div>
+
       <!-- Modal de Confirmação -->
       <po-modal #modal p-title="Excluir Leilão" [p-primary-action]="confirm"
         [p-secondary-action]="cancelLabel ? cancel : null">
@@ -42,6 +43,6 @@
   </ng-container>
 
   <ng-container *ngIf="auctions.length === 0">
-    <p>Você ainda nao possui nenhum leilão cadastrado.</p>
+    <p>Não foram encontrados leilões.</p>
   </ng-container>
 </div>

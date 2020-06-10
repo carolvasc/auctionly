@@ -87,35 +87,35 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Salva um novo leilão.
+   * Cria um novo leilão.
    * @param auction Leilão selecionado.
    */
   save(auction: Auction) {
     this.auctionSub = this.auctionService.saveAuction(auction)
       .subscribe(() => {
         this.poNotification.success(`Leilão criado com sucesso. `);
-        setTimeout(() => this.router.navigate(['/leilao/listar']), 1500);
+        setTimeout(() => this.router.navigate(['/leilao/listar']), 1500); // Redireciona para a listagem
       }, error => {
         this.poNotification.error(`Algo deu errado... ${error}`);
       });
   }
 
   /**
-   * Edita um leilão já existente, podendo inclusive adicionar novos campos como a data de finalização.
+   * Edita o leilão, podendo inclusive adicionar novos campos como a data de finalização.
    * @param auction Leilão selecionado.
    */
   update(auction: Auction) {
     this.auctionSub = this.auctionService.updateAuction(auction)
       .subscribe(() => {
         this.poNotification.success(`Leilão editado com sucesso. `);
-        setTimeout(() => this.router.navigate(['/leilao/listar']), 1500);
+        setTimeout(() => this.router.navigate(['/leilao/listar']), 1500); // Redireciona para a listagem
       }, error => {
         this.poNotification.error(`Algo deu errado... ${error}`);
       });
   }
 
   /**
-   * Recupera os dados vindos através da rota.
+   * Recupera os dados do leilão através da rota.
    */
   async activatedRouteParams() {
     await new Promise((resolve) => {

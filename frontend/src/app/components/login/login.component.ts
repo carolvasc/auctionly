@@ -9,6 +9,7 @@ import { APP_CONFIG, IAppConfig } from 'src/app/app.config';
 })
 export class LoginComponent implements OnInit {
 
+  // Alguma configurações do p-literals do login
   customLiterals: PoPageLoginLiterals = {
     loginPlaceholder: 'Insira seu usuário de acesso',
     passwordPlaceholder: 'Insira sua senha de acesso',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   
   constructor(@Inject(APP_CONFIG) private config: IAppConfig) { }
   
+  // Endpoint de autenticação
   authUrl = `${this.config.apiUrl}/auth/authenticate`;
 
   ngOnInit(): void {

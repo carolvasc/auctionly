@@ -23,7 +23,8 @@ export class AppComponent {
   constructor(
     public loginService: LoginService,
   ) {
-    this.loginService.loginSubject.subscribe(item => {
+    // Não mostra o menu na tela de login
+    this.loginService.loginSubject.subscribe(() => {
       if (sessionStorage.getItem('PO_USER_LOGIN')) {
         this.showMenu = true;
       } else {
