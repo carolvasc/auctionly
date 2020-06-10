@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 // Bibliotecas
 import { Subscription } from 'rxjs';
 // Classes e interfaces
@@ -28,6 +28,7 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
   auctionForm: FormGroup;
 
   constructor(
+    private router: Router,
     private fb: FormBuilder,
     private loginService: LoginService,
     private auctionService: AuctionService,
@@ -91,8 +92,9 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
    */
   save(auction: Auction) {
     this.auctionSub = this.auctionService.saveAuction(auction)
-      .subscribe((response: IApiResponse) => {
-        this.poNotification.success(`O leilão ${response.data.name} foi criado com sucesso. `);
+      .subscribe(() => {
+        this.poNotification.success(`Leilão criado com sucesso. `);
+        setTimeout(() => this.router.navigate(['/leilao/listar']), 1500);
       }, error => {
         this.poNotification.error(`Algo deu errado... ${error}`);
       });
@@ -104,8 +106,9 @@ export class AuctionRegisterComponent implements OnInit, OnDestroy {
    */
   update(auction: Auction) {
     this.auctionSub = this.auctionService.updateAuction(auction)
-      .subscribe((response: IApiResponse) => {
-        this.poNotification.success(`O leilão ${response.data.name} foi alterado com sucesso. `);
+      .subscribe(() => {
+        this.poNotification.success(`Leilão editado com sucesso. `);
+        setTimeout(() => this.router.navigate(['/leilao/listar']), 1500);
       }, error => {
         this.poNotification.error(`Algo deu errado... ${error}`);
       });

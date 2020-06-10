@@ -1,4 +1,4 @@
-<form [formGroup]="auctionForm" style="margin: 0px 185px !important">
+<form [formGroup]="auctionForm" class="margin">
   <div class="po-row">
     <po-input class="po-md-5" p-label="Nome" formControlName="name"> </po-input>
 
@@ -12,7 +12,7 @@
 
   </div>
 
-  <div class="po-row">
+  <div class="po-row po-mt-2">
     <po-datepicker class="po-md-5" formControlName="openingDate" p-format="dd/mm/yyyy" p-label="Data de Abertura">
     </po-datepicker>
 
@@ -20,7 +20,7 @@
     </po-datepicker>
   </div>
 
-  <div class="po-row">
+  <div class="po-row po-mt-5">
     <po-button class="po-md-3" p-label="Salvar" [p-disabled]="!auctionForm.valid" (p-click)="onSubmit()"> </po-button>
   </div>
 </form>
