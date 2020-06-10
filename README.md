@@ -3,7 +3,6 @@
 </h1>
 
 <p align="center">
-	
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/carolvasc/auctionly">
 	
   <a href="https://www.linkedin.com/in/carolina-vasconcelos/">
@@ -29,9 +28,9 @@
 
 ## 💻 Projeto
 
-<p>O auctionly é uma aplicação web para leilões online.</p>
+<p>O Auctionly é uma aplicação web para leilões online.</p>
 <p>Nessa primeira versão, já é possível realizar o CRUD (Create, Read, Update, Delete) dos leilões.</p>
-<p>Também possui autenticação de usuário e não permite que os desativados acessem o sistema.</p>
+<p>Também possui autenticação de usuário e não permite que os usuários desativados acessem o sistema.</p>
 
 ## :rocket: Tecnologias
 
@@ -47,9 +46,9 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## :information_source: Como usar
 
-Para clonar essa aplicação, você precisar ter o [Git](https://git-scm.com), [Node.js][nodejs] + [Npm][npm] instalados no seu computador.
+Para executar essa aplicação, você precisará do [Git](https://git-scm.com), [Node.js][nodejs] + [Npm][npm] e [Angular][angular] instalados no seu computador.
 
-Para utilizar o banco de dados você deverá instalar o [MongoDB][mongodb] e configurá-lo de acordo com o seu sistema operacional.
+Também instale e configure o [MongoDB][mongodb] de acordo com o seu sistema operacional.
 
 Do seu terminal:
 
@@ -64,10 +63,10 @@ $ git clone https://github.com/carolvasc/auctionly
 # Acesse o repositório
 $ cd auctionly/backend
 
-# Instale as dependencias
+# Instale as dependências
 $ npm install
 
-# Start o server
+# Inicie o servidor
 $ npm run dev
 
 # rodando na porta 3000
@@ -79,18 +78,18 @@ $ npm run dev
 # Acesse o repositório
 $ cd auctionly/frontend
 
-# Instale as dependencias
+# Instale as dependências
 $ npm install
 
-# Start o front
+# Inicie o front
 $ ng serve
 
 # rodando na porta 4200
 ```
 
-## :raising_hand: Criar usuário
+## :raising_hand: Criar usuario
 
-Como foi dito na descrição do projeto, você precisará de um usuário para acessar o sistema e como esse módulo ainda não está finalizado você só conseguirá criá-lo seguindo os passos abaixo:
+Você precisará de um usuário para acessar o sistema, e para criá-lo é só seguir os passos abaixo:
 
 - Utilize alguma ferramenta de testes de serviços RESTful.
 Algumas sugestões são o [Postman][postman], que possui até uma versão para navegador, não precisando instalar no computador ou o [Insomnia][insomnia].
@@ -99,7 +98,7 @@ Algumas sugestões são o [Postman][postman], que possui até uma versão para n
 
   - Na URL da requisição insira `http://localhost:3000/auth/register/`
 
-  - Copie e cole o objeto abaixo no body da requisição, e altere os dados que desejar
+  - Copie e cole o JSON abaixo no body da requisição, e altere os dados que desejar
     ```json
     {
       "name": "seu nome",
@@ -108,9 +107,9 @@ Algumas sugestões são o [Postman][postman], que possui até uma versão para n
       "active": true
     }
     ```
-  - Se tudo correr bem, deverá ser retornado um objeto com os dados inseridos e agora você já pode utiliza-lo para logar na aplicação.
+  - Se tudo correr bem, deverá ser retornado um objeto com os dados inseridos e agora você já pode utilizá-lo para logar na aplicação.
 
-_**OBS:** Não recomendo criar o usuário diretamente na collection pois a senha está sendo criptografada pela API e isso irá interferir no processo de login._
+_**OBS:** Não recomendo criar o usuário diretamente na Collection do Mongo, pois através da API a senha é salva criptografada para proporcionar uma maior segurança._
 
 [angular]: https://angular.io/
 [mongodb]: https://www.mongodb.com/
