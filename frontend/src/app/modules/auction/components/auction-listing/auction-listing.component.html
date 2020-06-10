@@ -40,4 +40,8 @@
       </po-modal>
     </po-widget>
   </ng-container>
+
+  <ng-container *ngIf="auctions.length === 0">
+    <p>Você ainda nao possui nenhum leilão cadastrado.</p>
+  </ng-container>
 </div>

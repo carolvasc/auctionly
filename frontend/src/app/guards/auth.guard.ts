@@ -20,6 +20,8 @@ export class AuthGuard implements CanActivate {
         const { user, token } = JSON.parse(sessionStorage.getItem('PO_USER_LOGIN'));
         this.loginService.setTokenJwt(token);
         this.loginService.setUser(user);
+
+        this.loginService.loginSubject.next(true);
       }
 
       return true;

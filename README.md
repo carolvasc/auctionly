@@ -103,7 +103,6 @@ Algumas sugestões são o [Postman][postman], que possui até uma versão para n
     ```json
     {
       "name": "seu nome",
-      "email": "seuemail@email.com",
       "login": "seulogin",
       "password": "suasenha",
       "active": true
