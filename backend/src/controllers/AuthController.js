@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
 
     user.password = undefined;
 
-    return res.send({ message: 'Usuário logado com sucesso.', data: { user, token: generateToken({ id: user.id }) } });
+    return res.send({ message: 'Usuário criado com sucesso.', data: { user, token: generateToken({ id: user.id }) } });
   } catch (err) {
     return res.status(400).send({ error: 'Erro ao cadastrar o usuário.' });
   }

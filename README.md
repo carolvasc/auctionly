@@ -68,7 +68,7 @@ $ cd auctionly/backend
 $ npm install
 
 # Start o server
-$ node src/server.js
+$ npm run dev
 
 # rodando na porta 3000
 ```

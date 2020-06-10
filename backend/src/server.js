@@ -16,4 +16,6 @@ app.use(cors());
 app.use("/auth", AuthController);
 app.use("/api", AuctionController);
 
-app.listen(3000);
+app.listen(3000, function () {
+  console.log(`API is running on port 3000.`);
+})
