@@ -24,7 +24,7 @@
   <a href="#-Projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#rocket-Tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#information_source-Como-usar">Como usar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-Criar-usuario">Criar usuário</a>
+  <a href="#raising_hand-Criar-usuario">Criar usuário</a>
 </p>
 
 ## 💻 Projeto
@@ -90,7 +90,7 @@ $ ng serve
 
 ## :raising_hand: Criar usuário
 
-Como foi dito na descrição do projeto, você precisará de um usuário para acessar o sistema e como esse módulo ainda não está finalizado você só conseguirá criá-lo da seguinte forma:
+Como foi dito na descrição do projeto, você precisará de um usuário para acessar o sistema e como esse módulo ainda não está finalizado você só conseguirá criá-lo seguindo os passos abaixo:
 
 - Utilize alguma ferramenta de testes de serviços RESTful.
 Algumas sugestões são o [Postman][postman], que possui até uma versão para navegador, não precisando instalar no computador ou o [Insomnia][insomnia].
@@ -109,6 +109,8 @@ Algumas sugestões são o [Postman][postman], que possui até uma versão para n
     }
     ```
   - Se tudo correr bem, deverá ser retornado um objeto com os dados inseridos e agora você já pode utiliza-lo para logar na aplicação.
+
+_**OBS:** Não recomendo criar o usuário diretamente na collection pois a senha está sendo criptografada pela API e isso irá interferir no processo de login._
 
 [angular]: https://angular.io/
 [mongodb]: https://www.mongodb.com/
