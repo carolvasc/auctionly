@@ -21,6 +21,7 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
   @ViewChild('modal') modal: PoModalComponent;
 
   getAuctionSub: Subscription;
+  reloadListSub: Subscription;
   deleteAuctionSub: Subscription;
 
   modalContent = '';
@@ -52,9 +53,11 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    // Popula o array com os leilões cadastrados
-    this.getAuctionSub = this.auctionService.getAllAuctions()
-      .subscribe((response: IApiResponse) => this.auctions = response.data as Auction[]);
+    this.getAllAuctions();
+
+    // Ao excluir um leilão a lista deverá ser atualizada
+    this.reloadListSub = this.auctionService.reloadListSubject
+      .subscribe(reload => reload === true ? this.getAllAuctions() : null);
   }
 
   ngOnDestroy() {
@@ -65,6 +68,18 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
     if (this.deleteAuctionSub) {
       this.deleteAuctionSub.unsubscribe();
     }
+
+    if (this.reloadListSub) {
+      this.reloadListSub.unsubscribe();
+    }
+  }
+
+  /**
+   * Popula o array com os leilões cadastrados
+   */
+  getAllAuctions() {
+    this.getAuctionSub = this.auctionService.getAllAuctions()
+      .subscribe((response: IApiResponse) => this.auctions = response.data as Auction[]);
   }
 
   /**
@@ -83,6 +98,7 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
       this.deleteAuctionSub = this.auctionService.deleteAuction(this.currentAuction._id)
         .subscribe(response => {
           this.poNotification.success(`Leilão excluído com sucesso.`);
+          this.auctionService.reloadListSubject.next(true);
           this.modal.close();
         }, error => {
           this.poNotification.error(`Algo deu errado... ${error}`);
@@ -97,7 +113,7 @@ export class AuctionListingComponent implements OnInit, OnDestroy {
    */
   modalConfirmation(auction: Auction) {
     this.currentAuction = auction;
-    this.modalContent = `Você tem certeza que deseja excluir o leilão ${auction.name}`;
+    this.modalContent = `Você tem certeza que deseja excluir o leilão ${auction.name}?`;
 
     this.confirm.label = this.confirmLabel;
     this.cancel.label = this.cancelLabel;

@@ -1,7 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+// Configurações
 import { APP_CONFIG, IAppConfig } from '../../app.config';
+// Classes e interfaces
 import { Auction } from '../../classes/Auction';
 import { IApiResponse } from '../../interfaces/ApiResponse';
 
@@ -9,6 +11,8 @@ import { IApiResponse } from '../../interfaces/ApiResponse';
   providedIn: 'root'
 })
 export class AuctionService {
+
+  reloadListSubject: Subject<boolean> = new Subject();
 
   constructor(private http: HttpClient, @Inject(APP_CONFIG) private config: IAppConfig) { }
 
